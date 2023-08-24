@@ -1,0 +1,56 @@
+@tailwind base;
+@tailwind components;
+
+
+body{
+  margin: 0;
+  padding: 0;
+  background-color: #303030;
+
+}
+
+#message{
+  background-color: #303030;
+  max-width: 480px;
+}
+
+#users-menu{
+  width: 420px;
+  min-width: 420px;
+
+}
+
+#sub-menu-fixed{
+  width: 420px;
+}
+
+#container-messages{
+  width: 624px
+}
+
+#form-container form{
+  width: 624px
+}
+
+#conteiner-display-m{
+  width: 624px;
+  margin-top: 8px;
+  margin-bottom: 80px;
+
+}
+
+#inp-message{
+  background-color: #303030;
+}
+
+#send{
+  background-color: #9884f2;
+  transition: all 150ms;
+}
+
+#send:hover{
+  background-color: #8773e1;
+}
+
+@tailwind utilities;
+
