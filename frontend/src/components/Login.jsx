@@ -10,6 +10,7 @@ const Login = () => {
   const [username, setUsername] = useState('')
   const [password, setPassword] = useState('')
   const [isPasswordVisible, setisPasswordVisible] = useState(false)
+  const [remember, setRemember] = useState(false)
   const [validationErrors, setValidationErrors] = useState({})
   const dispatch = useDispatch()
   const navigate = useNavigate()
@@ -57,7 +58,13 @@ const Login = () => {
           if (res.status === 200) {
             dispatch(addTokens(data))
             dispatch(addUsername(username))
-            navigate('lobby')
+            
+            localStorage.setItem('tkaccess', data.access)
+            localStorage.setItem('tkrefresh', data.refresh)
+            localStorage.setItem('username', username)
+            
+
+            navigate('chat')
   
           }else {
             const errors = {}
@@ -135,7 +142,6 @@ const Login = () => {
       </form>
     </div> */}
 
-  const handlePasswordVisibility = () => setisPasswordVisible(!isPasswordVisible)
 
   return (
     <section className="bg-gray-50 dark:bg-gray-900 min-h-screen">
@@ -203,32 +209,7 @@ const Login = () => {
                         {validationErrors.password && password && <span className="text-red-500 w-fit">{validationErrors.password}</span>}
                         {validationErrors.detail && <span className="text-red-500 w-fit">{validationErrors.detail}</span>}
                   </div>
-                  <div className="flex items-center justify-between">
-                      <div className="flex items-start">
-                          <div className="flex items-center h-5">
-                            <input 
-                              id="remember" 
-                              aria-describedby="remember" 
-                              type="checkbox" 
-                              className="
-                                w-4 h-4 
-                                border 
-                                border-gray-300
-                                rounded 
-                                bg-gray-50 
-                                focus:ring-3 
-                                focus:ring-primary-300 
-                                dark:bg-gray-700 
-                                dark:border-gray-600 
-                                dark:focus:ring-primary-600 
-                                dark:ring-offset-gray-800" 
-                                required
-                              />
-                          </div>
-                          <div className="ml-3 text-sm">
-                            <label htmlFor="remember" className="text-gray-500 dark:text-gray-300">Remember me</label>
-                          </div>
-                      </div>
+                  <div className="flex items-center justify-end">
                       <a href="#" className="text-sm font-medium text-primary-600 hover:underline dark:text-primary-500">Forgot password?</a>
                   </div>
                   <button type="submit" className="w-full text-white bg-primary-600 hover:bg-primary-700 focus:ring-4 focus:outline-none focus:ring-primary-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:bg-primary-600 dark:hover:bg-primary-700 dark:focus:ring-primary-800">

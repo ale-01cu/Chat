@@ -2,13 +2,14 @@ import {REGISTERURL} from '../apis/endpoints'
 import { object, string } from 'yup';
 import { useNavigate, Link } from 'react-router-dom';
 import { useEffect, useState } from 'react'
+import Avatar from '../assets/avatar.svg'
 
 const Register = () => {
-  const [isPasswordVisible, setisPasswordVisible] = useState(false)
   const [validationErrors, setValidationErrors] = useState({})
   const [username, setUsername] = useState('')
   const [password, setPassword] = useState('')
   const [re_password, setRePassword] = useState('')
+  const [avatar, setAvatar] = useState(null);
   const navigate = useNavigate();
 
   useEffect(() => {
@@ -52,18 +53,15 @@ const Register = () => {
     e.preventDefault()
 
     if (!validationErrors.username && !validationErrors.password && !validationErrors.re_password) {
-      const formData = {
-        username,
-        password,
-        re_password,
-      };
+      const formData = new FormData();
+      formData.append('username', username);
+      formData.append('password', password);
+      formData.append('re_password', re_password);
+      formData.append('photo', avatar);
 
       fetch(REGISTERURL,{
         method: "POST",
-        headers: {
-          "Content-Type": "application/json"
-        },
-        body: JSON.stringify(formData)
+        body: formData
       })
       .then(res => {
         const getData = async () => res.json()
@@ -130,59 +128,11 @@ const Register = () => {
     setRePassword(value)
   }
 
-  const handlePasswordVisibility = () => setisPasswordVisible(!isPasswordVisible)
+  const handleFileChange = (event) => {
+    setAvatar(event.target.files[0]);
+  };
 
-  {/* <div className="min-h-screen flex justify-center items-center">
-      <form action="" onSubmit={handleSubmit} className="p-10 flex flex-col items-center w-full">
-        <div><h1 className="text-center text-4xl p-3 font-medium">Registro</h1></div>
-        
-        <div className="flex flex-col space-y-6 p-5 min-w-min w-1/2 max-w-md">
-          <input 
-            type='text' 
-            name="username" 
-            className="p-2 px-5 border border-solid border-slate-400 rounded-xl min-w-min" 
-            placeholder="Escriba su Nombre"
-            onChange={handleChangeUserName}
-            value={username}
-            required
-          />
-          {validationErrors.username && username && <span className="text-red-500 w-fit">{validationErrors.username}</span>}
-          
-          <input 
-            type={isPasswordVisible ? 'text' : 'password'} 
-            name="password" 
-            className="p-2 px-5 border border-solid border-slate-400 rounded-xl min-w-min" 
-            placeholder="Contraseña"
-            onChange={handleChangePassword}
-            value={password}
-            required
-          />
-          {validationErrors.password && password && <span className="text-red-500 w-fit">{validationErrors.password}</span>}
 
-          <input 
-            type={isPasswordVisible ? 'text' : 'password'} 
-            name="re_password" 
-            className="p-2 px-5 border border-solid border-slate-400 rounded-xl min-w-min" 
-            placeholder="Condirmar Contraseña"
-            onChange={handleChangeRePassword}
-            value={re_password}
-            required
-          />
-          {validationErrors.re_password && re_password && <span className="text-red-500 w-fit">{validationErrors.re_password}</span>}
-          {validationErrors.non_field_errors && <span className="text-red-500 w-fit">{validationErrors.non_field_errors}</span>}
-
-          <button type='button' className='self-end' onClick={handlePasswordVisibility}><img src={isPasswordVisible ? LogoEyeOff : LogoEye} alt="" /></button>
-        </div>
-
-        <div className="p-5">
-          <button type="submit" className="rounded-lg border border-solid border-slate-400 p-1 px-3 hover:bg-slate-200 transition-all duration-200">
-            Registrarme
-          </button>
-        </div>
-          
-      </form>
-    </div> */}
-  
   return (
     <section className="bg-gray-50 dark:bg-gray-900 min-h-screen">
       <div className="min-h-screen flex flex-col items-center justify-center px-6 py-8 mx-auto md:h-screen lg:py-0">
@@ -192,6 +142,37 @@ const Register = () => {
                       Create and account
                   </h1>
                   <form onSubmit={handleSubmit} className="space-y-4 md:space-y-6" action="#">
+                      <div>
+                        <label className="flex justify-center mb-2 text-sm font-medium text-gray-900 dark:text-white" htmlFor="photo">
+                          <div className="relative w-10 h-10 overflow-hidden bg-gray-100 rounded-full dark:bg-gray-600">
+                            {
+                              avatar
+                              ? <img src={URL.createObjectURL(avatar)} alt="" className='object-cover'/>
+                              : <img src={Avatar} alt="" className='className="absolute w-12 h-12 -left-1"'/>
+                            }
+                            
+                          </div>
+                        </label>
+                        <input 
+                          className="
+                          block 
+                          w-full 
+                          text-sm 
+                          text-gray-900 
+                          border 
+                          border-gray-300 
+                          rounded-lg cursor-pointer 
+                          bg-gray-50 
+                          dark:text-gray-400 
+                          focus:outline-none 
+                          dark:bg-gray-700 
+                          dark:border-gray-600 
+                          dark:placeholder-gray-400" 
+                        id="file_input" 
+                        type="file"
+                        onChange={handleFileChange}
+                      />
+                      </div>
                       <div>
                           <label htmlFor="username" className="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Your Username</label>
                           <input 

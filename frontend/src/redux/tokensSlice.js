@@ -11,14 +11,11 @@ export const tokensSlice = createSlice({
     initialState,
     reducers: {
         addTokens: (state, action) => {
-            localStorage.setItem('tkaccess', action.payload.access)
-            localStorage.setItem('tkrefresh', action.payload.refresh)
             state.access = action.payload.access
             state.refresh = action.payload.refresh
         },
         addUsername: (state, action) => {
             state.username = action.payload
-            localStorage.setItem('username', action.payload)
         }
     }
 })

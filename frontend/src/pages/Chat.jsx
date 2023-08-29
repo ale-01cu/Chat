@@ -1,7 +1,9 @@
 import { useEffect, useState } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
-import {addUsername} from '../redux/tokensSlice'
+import {useNavigate} from 'react-router-dom'
+import {addUsername, addTokens} from '../redux/tokensSlice'
 import SendArrow from '../assets/send_FILL1_wght400_GRAD0_opsz24.svg'
+import Logout from '../assets/logout_FILL0_wght600_GRAD0_opsz24.svg'
 
 var chatSocket = null
 
@@ -12,12 +14,13 @@ function Chat() {
   const accesToken = useSelector(s => s.tokens.access)
   const username = useSelector(s => s.tokens.username)
   const dispatch = useDispatch()
+  const navegate = useNavigate()
 
   useEffect(() => {
-    if (!username) {
-      const username = localStorage.getItem('username')
-      dispatch(addUsername(username))
-    }
+      const Storageusername = localStorage.getItem('username')
+
+      if (Storageusername)
+        dispatch(addUsername(Storageusername))
   
 
   }, [dispatch, username])
@@ -88,6 +91,7 @@ function Chat() {
       };
 
     }
+    
   }, [messages, accesToken])
   
 
@@ -107,11 +111,23 @@ function Chat() {
 
   }
 
+  const handleLogout = () => {
+    localStorage.setItem('tkaccess', '')
+    localStorage.setItem('tkrefresh', '')
+    localStorage.setItem('username', '')
+    dispatch(addTokens({
+      access: '', 
+      refresh: ''
+    }))
+    dispatch(addUsername(''))
+    navegate('/')
+  }
+
   
   return (
     <div id='container-chat' className='xl:px-32 flex min-h-screen w-full'>
       <div id='users-menu' className='relative flex'>
-        <div id='sub-menu-fixed' className=' bg-zinc-950 fixed h-full top-0 p-3'>
+        <div id='sub-menu-fixed' className=' bg-zinc-950 fixed h-full top-0 p-3 flex flex-col justify-between'>
           <ul className='p-3'> 
             {
               usersOnline.map(u => (
@@ -121,6 +137,11 @@ function Chat() {
               ))
             }
           </ul>
+
+          <button onClick={handleLogout} type="button" className="px-5 py-2.5 text-sm font-medium text-white inline-flex items-center bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 rounded-lg text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800">
+            <img src={Logout} alt=""  className='text-white mr-2'/>
+            Cerrar Sesión
+          </button>
         </div>
 
       </div>
@@ -134,7 +155,11 @@ function Chat() {
                 console.log(m.presence.user.username == username);
                 return <div id='message' key={m.id} className={`text-white w-max pl-3 px-2 py-2 rounded-xl max-w ${m.presence.user.username == username ? 'self-end' : ''}`}>
                   {/* <span>{Object.keys(m)}</span> */}
-                  <span>{m.presence.user.username}</span>
+                  {
+                    m.presence.user.username == username
+                    ? null
+                    : <span>{m.presence.user.username}</span>
+                  }
                   <p className='break-all'>{m.message}</p>
                 </div>
               })
