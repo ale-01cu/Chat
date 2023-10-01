@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
-import {useNavigate} from 'react-router-dom'
+import {Link, useNavigate} from 'react-router-dom'
 import {addUsername, addTokens} from '../redux/tokensSlice'
 import SendArrow from '../assets/send_FILL1_wght400_GRAD0_opsz24.svg'
 import Logout from '../assets/logout_FILL0_wght600_GRAD0_opsz24.svg'
@@ -22,7 +22,6 @@ function Chat() {
       if (Storageusername)
         dispatch(addUsername(Storageusername))
   
-
   }, [dispatch, username])
 
   useEffect(() => {
@@ -91,7 +90,7 @@ function Chat() {
       };
 
     }
-    
+
   }, [messages, accesToken])
   
 
@@ -125,14 +124,33 @@ function Chat() {
 
   
   return (
-    <div id='container-chat' className='xl:px-32 flex min-h-screen w-full'>
-      <div id='users-menu' className='relative flex'>
-        <div id='sub-menu-fixed' className=' bg-zinc-950 fixed h-full top-0 p-3 flex flex-col justify-between'>
-          <ul className='p-3'> 
+    <div id='container-chat' className='
+      xl:px-32 
+      flex 
+      min-h-screen
+      w-full'>
+      <div id='users-menu' className='relative md:flex hidden'>
+        <div id='sub-menu-fixed' className=' 
+          bg-zinc-950 
+          fixed 
+          h-full 
+          top-0 
+          p-3 
+          flex 
+          flex-col 
+          justify-between'>
+          <ul className='p-3 space-y-5'> 
             {
               usersOnline.map(u => (
+
                 <li key={u.id}>
-                  <a href="" className='px-3 py-2 w-full text-white'>{u.username}</a>
+                  <Link className="flex items-center space-x-4">
+                    <img className="w-10 h-10 rounded-full" src={"http://localhost:8000" + u.photo} alt=""/>
+                    <div className="font-medium dark:text-white">
+                        <div>{u.username}</div>
+                        <div className="text-sm text-gray-500 dark:text-gray-400">Online</div>
+                    </div>
+                  </Link>
                 </li>
               ))
             }
@@ -145,20 +163,39 @@ function Chat() {
         </div>
 
       </div>
-      <div id='container' className='w-full bg-zinc-900 flex flex-col items-center'>
-        <div id='conteiner-display-m'>
-          <div id='display-m' className='h-full w-11/12 px-2 pr-4 flex flex-col gap-y-3'>
+
+      <div id='container' className='
+        w-full 
+        bg-zinc-900 
+        md:flex 
+        md:flex-col 
+        md:items-center'>
+        <div id='conteiner-display-m' className='h-full mb-20 mt-2'>
+          <div id='display-m' className='
+            h-full 
+            flex 
+            flex-col
+            px-6
+            lg:w-11/12 
+            lg:px-2 
+            lg:pr-7 
+            gap-y-3'>
             {
               messages.length > 0 && messages.map(m => {
-                console.log(username);
-                console.log(m.presence.user.username);
-                console.log(m.presence.user.username == username);
-                return <div id='message' key={m.id} className={`text-white w-max pl-3 px-2 py-2 rounded-xl max-w ${m.presence.user.username == username ? 'self-end' : ''}`}>
+                return <div id='message' key={m.id} className={`
+                  text-white 
+                  w-max 
+                  pl-3 
+                  px-2 
+                  py-2 
+                  rounded-xl 
+                  max-w 
+                  ${m.presence.user.username == username ? 'self-end' : ''}`}>
                   {/* <span>{Object.keys(m)}</span> */}
                   {
                     m.presence.user.username == username
                     ? null
-                    : <span>{m.presence.user.username}</span>
+                    : <Link to={"#"} className='text-slate-400'>{m.presence.user.username}</Link>
                   }
                   <p className='break-all'>{m.message}</p>
                 </div>
@@ -167,10 +204,43 @@ function Chat() {
           </div>
 
         </div>
-        <div id='form-container' className='h-74 fixed bottom-0 bg-zinc-900'>
-          <form action="" onSubmit={handleSubmit} className='px-2 py-1 flex gap-x-2'>
-            <input id='inp-message' className='p-3 w-11/12 text-white rounded-xl' placeholder='Escriba un mensaje aqui' value={prompt} onChange={handleChange}></input>
-            <button type="submit" name="" id="send" className='w-1/12 text-white rounded-full p-1 flex justify-center items-center'>
+        <div id='form-container' className='
+          w-full
+          md:w-auto
+          h-74 
+          fixed 
+          bottom-0 
+          bg-zinc-900'>
+          <form action="" onSubmit={handleSubmit} className='
+            px-5 
+            py-1 
+            flex 
+            gap-x-2'>
+            <input id='inp-message' className='
+                p-3
+                w-full 
+                md:w-11/12
+                text-white 
+                rounded-xl' 
+              placeholder='Escriba un mensaje aqui' 
+              value={prompt} 
+              onChange={handleChange}
+              autoComplete={false}>
+              
+            </input>
+            <button 
+              type="submit" 
+              name="" 
+              id="send" 
+              className='
+                w-12
+                lg:w-1/12 
+                text-white 
+                rounded-full 
+                p-1 
+                flex 
+                justify-center 
+                items-center'>
               <img src={SendArrow} alt="" width={27} height={27} className=''/>
             </button>
           </form>

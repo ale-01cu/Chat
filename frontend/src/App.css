@@ -1,12 +1,16 @@
 @tailwind base;
 @tailwind components;
 
-
 body{
   margin: 0;
   padding: 0;
   background-color: #303030;
 
+}
+
+#root {
+  display: flex;
+  justify-content: center;
 }
 
 #message{
@@ -24,20 +28,42 @@ body{
   width: 420px;
 }
 
-#container-messages{
-  width: 624px
+
+@media screen and (min-width: 768px) and (max-width: 1060px) {
+  #sub-menu-fixed{
+    width: 300px;
+  }
+
+  #users-menu{
+    width: 300px;
+    min-width: 300px;
+  
+  }
+
+  #form-container form{
+    width: 460px
+  }
+  
+  #conteiner-display-m{
+    width: 453px;
+  }
+
 }
 
-#form-container form{
-  width: 624px
+@media screen and (min-width: 1024px) {
+  #container-messages{
+    width: 624px
+  }
+
+  #form-container form{
+    width: 624px
+  }
+
+  #conteiner-display-m{
+    width: 624px;
+  }
 }
 
-#conteiner-display-m{
-  width: 624px;
-  margin-top: 8px;
-  margin-bottom: 80px;
-
-}
 
 #inp-message{
   background-color: #303030;
