@@ -28,7 +28,9 @@ function Chat() {
     window.scrollTo(0, document.body.scrollHeight);
     
     if (accesToken) {
+      console.log("hay token");
       if (!chatSocket) {
+        console.log("no hay socket");
         chatSocket = new WebSocket(
           'ws://'
           + 'localhost:8000'
@@ -36,7 +38,7 @@ function Chat() {
           + 'evento_almejas'
           + '/?token=' + accesToken
         );
-
+        console.log(chatSocket);
       }
 
       chatSocket.onmessage = function(e) {
@@ -119,6 +121,7 @@ function Chat() {
       refresh: ''
     }))
     dispatch(addUsername(''))
+    chatSocket = null
     navegate('/')
   }
 
@@ -177,7 +180,8 @@ function Chat() {
             flex-col
             px-6
             lg:w-11/12 
-            lg:px-2 
+            lg:px-2
+            lg:pl-5 
             lg:pr-7 
             gap-y-3'>
             {
@@ -225,7 +229,7 @@ function Chat() {
               placeholder='Escriba un mensaje aqui' 
               value={prompt} 
               onChange={handleChange}
-              autoComplete={false}>
+              autoComplete={"false"}>
               
             </input>
             <button 

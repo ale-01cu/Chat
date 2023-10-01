@@ -8,10 +8,6 @@ body{
 
 }
 
-#root {
-  display: flex;
-  justify-content: center;
-}
 
 #message{
   background-color: #303030;
