@@ -4,6 +4,8 @@ import {Link, useNavigate} from 'react-router-dom'
 import {addUsername, addTokens} from '../redux/tokensSlice'
 import SendArrow from '../assets/send_FILL1_wght400_GRAD0_opsz24.svg'
 import Logout from '../assets/logout_FILL0_wght600_GRAD0_opsz24.svg'
+import menuIcon from '../assets/menu_FILL0_wght300_GRAD0_opsz24.svg'
+import closeIcon from '../assets/close_FILL0_wght300_GRAD0_opsz24.svg'
 
 var chatSocket = null
 
@@ -11,6 +13,7 @@ function Chat() {
   const [usersOnline, setUsersOnline] = useState([])
   const [messages, setMessages] = useState([]) // 0 el local y 1 el externo
   const [prompt, setPrompt] = useState('')
+  const [visibleMenu, setVisibleMenu] = useState(false)
   const accesToken = useSelector(s => s.tokens.access)
   const username = useSelector(s => s.tokens.username)
   const dispatch = useDispatch()
@@ -126,6 +129,10 @@ function Chat() {
     navegate('/')
   }
 
+  const handleMenu = () => {
+    setVisibleMenu(!visibleMenu)
+  }
+
   
   return (
     <div id='container-chat' className='
@@ -133,6 +140,129 @@ function Chat() {
       flex 
       min-h-screen
       w-full'>
+
+      <div className='
+        fixed 
+        top-0
+        m-2
+        md:hidden'>
+        <button 
+          type='button' 
+          onClick={handleMenu}
+          className='
+            p-2 
+            rounded-3xl 
+            flex 
+            justify-center 
+            items-center 
+            hover:bg-slate-900
+            bg-slate-950
+            transition-all'>
+          <img src={menuIcon} alt="Menu" />
+        </button>
+      </div>
+
+      <div id='users-menu-movil' 
+        className={`
+          fixed 
+          left-0 
+          top-0 
+          w-full 
+          bg-red-500 
+          h-screen 
+          z-50
+          md:hidden
+          transition-all 
+          ${visibleMenu ? 'translate-x-0' : '-translate-x-full'}`}>
+
+        <div 
+          id='container-close-icon' 
+          className='
+            absolute 
+            top-0 
+            right-0
+            p-2
+            m-2'>
+          <button 
+            id='btn-close-icon' 
+            type='button'
+            onClick={handleMenu}>
+
+            <img src={closeIcon} alt="close" />
+          </button>
+        </div>
+
+        <div id='sub-menu-fixed-movil' className='
+          flex
+          bg-zinc-950 
+          h-full 
+          p-3 
+          flex-col
+          justify-between
+          '>
+          <ul className='p-3 space-y-5'> 
+            {
+              usersOnline.map(u => (
+
+                <li key={u.id}>
+                  <Link className='
+                    flex 
+                    items-center 
+                    space-x-4
+                  '>
+                    <img 
+                      src={"http://localhost:8000" + u.photo} 
+                      alt=""
+                      className='
+                        w-10 
+                        h-10 
+                        rounded-full
+                      '/>
+                    <div className='
+                      font-medium 
+                      dark:text-white
+                    '>
+                        <div>{u.username}</div>
+                        <div className='
+                          text-sm 
+                          text-gray-500 
+                          dark:text-gray-400
+                        '>Online</div>
+                    </div>
+                  </Link>
+                </li>
+              ))
+            }
+          </ul>
+
+          <button 
+            onClick={handleLogout} 
+            type="button"
+            className='
+              px-5 
+              py-2.5 
+              text-sm 
+              font-medium 
+              text-white 
+              inline-flex 
+              items-center 
+              bg-blue-700 
+              hover:bg-blue-800 
+              focus:ring-4 
+              focus:outline-none 
+              focus:ring-blue-300 
+              rounded-lg text-center 
+              dark:bg-blue-600 
+              dark:hover:bg-blue-700 
+              dark:focus:ring-blue-800
+            '>
+            <img src={Logout} alt=""/>
+            Cerrar Sesión
+          </button>
+        </div>
+
+      </div>
+
       <div id='users-menu' className='relative md:flex hidden'>
         <div id='sub-menu-fixed' className=' 
           bg-zinc-950 
