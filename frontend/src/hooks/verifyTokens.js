@@ -58,12 +58,20 @@ const VerifyTokens = () => {
               access: '', 
               refresh: ''
             }))
+            navegate('/')
           }
         }
       }
     }
 
-    verify();
+    if (!tokenAccess && !tokenRefresh) {
+      navegate('/')
+    
+    }else {
+      verify();
+      
+    }
+
   }, [dispatch, navegate])
 
   return null;
